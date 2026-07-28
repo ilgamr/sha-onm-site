@@ -1,0 +1,6 @@
+# Link previews (Telegram, WhatsApp, WeChat, LinkedIn) are allowed.
+# Search-engine indexing is disabled via the robots meta tag in index.html.
+User-agent: *
+Allow: /
+
+Sitemap: https://sha-onm.com/sitemap.xml
