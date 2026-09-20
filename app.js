@@ -1,0 +1,8 @@
+const menuButton=document.querySelector('.menu-toggle');
+const mobileNav=document.querySelector('#mobile-nav');
+menuButton.addEventListener('click',()=>{const open=menuButton.getAttribute('aria-expanded')==='true';menuButton.setAttribute('aria-expanded',String(!open));menuButton.setAttribute('aria-label',open?'Open menu':'Close menu');mobileNav.hidden=open;});
+mobileNav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mobileNav.hidden=true;menuButton.setAttribute('aria-expanded','false');menuButton.setAttribute('aria-label','Open menu');}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mobileNav.hidden){mobileNav.hidden=true;menuButton.setAttribute('aria-expanded','false');menuButton.setAttribute('aria-label','Open menu');menuButton.focus();}});
+document.querySelectorAll('.category').forEach(item=>item.addEventListener('toggle',()=>{if(item.open){document.querySelectorAll('.category').forEach(other=>{if(other!==item)other.open=false;});}}));
+document.querySelector('#year').textContent=new Date().getFullYear();
+document.querySelector('.copy-email').addEventListener('click',async()=>{const status=document.querySelector('#copy-status');try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText('info@sha-onm.com');}else{const field=document.createElement('textarea');field.value='info@sha-onm.com';field.style.position='fixed';field.style.opacity='0';document.body.append(field);field.select();const copied=document.execCommand('copy');field.remove();if(!copied)throw new Error('Clipboard unavailable');}status.textContent='Email copied';}catch{status.textContent='Select and copy: info@sha-onm.com';}});

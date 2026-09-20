@@ -1,6 +1,37 @@
-# Link previews (Telegram, WhatsApp, WeChat, LinkedIn) are allowed.
-# Search-engine indexing is disabled via the robots meta tag in index.html.
-User-agent: *
-Allow: /
+# Search-engine indexing is disabled for this site.
+# Link-preview crawlers (Telegram, WhatsApp, WeChat, LinkedIn, Slack) are
+# not listed below and therefore remain allowed, so shared links keep
+# showing the title, description and preview image.
 
-Sitemap: https://sha-onm.com/sitemap.xml
+User-agent: Googlebot
+Disallow: /
+
+User-agent: Googlebot-Image
+Disallow: /
+
+User-agent: Bingbot
+Disallow: /
+
+User-agent: Slurp
+Disallow: /
+
+User-agent: DuckDuckBot
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
+
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: Sogou web spider
+Disallow: /
+
+User-agent: 360Spider
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
