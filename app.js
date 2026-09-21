@@ -6,3 +6,86 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mobileNav.hidden){
 document.querySelectorAll('.category').forEach(item=>item.addEventListener('toggle',()=>{if(item.open){document.querySelectorAll('.category').forEach(other=>{if(other!==item)other.open=false;});}}));
 document.querySelector('#year').textContent=new Date().getFullYear();
 document.querySelector('.copy-email').addEventListener('click',async()=>{const status=document.querySelector('#copy-status');try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText('info@sha-onm.com');}else{const field=document.createElement('textarea');field.value='info@sha-onm.com';field.style.position='fixed';field.style.opacity='0';document.body.append(field);field.select();const copied=document.execCommand('copy');field.remove();if(!copied)throw new Error('Clipboard unavailable');}status.textContent='Email copied';}catch{status.textContent='Select and copy: info@sha-onm.com';}});
+const officeVideo = document.querySelector('#office-video');
+if (officeVideo) {
+  const videoButton = document.querySelector('.video-toggle');
+  const videoLabel = videoButton.querySelector('.video-toggle-label');
+  const videoIcon = videoButton.querySelector('.video-toggle-icon');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let inView = false;
+  let userPaused = false;
+  let manuallyStarted = false;
+  let playbackFailed = false;
+
+  officeVideo.muted = true;
+  officeVideo.defaultMuted = true;
+  videoButton.hidden = false;
+
+  function updateVideoButton() {
+    if (playbackFailed) return;
+    const playing = !officeVideo.paused;
+    const label = playing ? 'Pause video' : 'Play video';
+    videoButton.setAttribute('aria-label', label);
+    videoLabel.textContent = label;
+    videoIcon.textContent = playing ? 'Ⅱ' : '▶';
+  }
+
+  function canPlayVideo() {
+    return inView && !document.hidden && !userPaused && !playbackFailed && (!reducedMotion.matches || manuallyStarted);
+  }
+
+  function syncVideoPlayback() {
+    if (!canPlayVideo()) {
+      officeVideo.pause();
+      return;
+    }
+    if (!officeVideo.getAttribute('src')) {
+      officeVideo.src = officeVideo.dataset.src;
+      officeVideo.load();
+    }
+    const request = officeVideo.play();
+    if (request && typeof request.then === 'function') {
+      request.then(() => {
+        if (!canPlayVideo()) officeVideo.pause();
+      }).catch(updateVideoButton);
+    }
+  }
+
+  videoButton.addEventListener('click', () => {
+    userPaused = !officeVideo.paused;
+    if (!userPaused) manuallyStarted = true;
+    syncVideoPlayback();
+  });
+  officeVideo.addEventListener('play', updateVideoButton);
+  officeVideo.addEventListener('pause', updateVideoButton);
+  officeVideo.addEventListener('error', () => {
+    playbackFailed = true;
+    videoLabel.textContent = 'Video unavailable';
+    videoIcon.textContent = '';
+    videoButton.setAttribute('aria-label', 'Video unavailable');
+    videoButton.disabled = true;
+  });
+  document.addEventListener('visibilitychange', syncVideoPlayback);
+  reducedMotion.addEventListener('change', () => {
+    manuallyStarted = false;
+    syncVideoPlayback();
+  });
+
+  if ('IntersectionObserver' in window) {
+    const videoObserver = new IntersectionObserver(entries => {
+      const entry = entries[0];
+      inView = entry.isIntersecting && entry.intersectionRatio >= 0.2;
+      syncVideoPlayback();
+    }, { threshold: [0, 0.2], rootMargin: '-100px 0px 0px 0px' });
+    videoObserver.observe(officeVideo);
+  } else {
+    const checkVideoVisibility = () => {
+      const bounds = officeVideo.getBoundingClientRect();
+      inView = bounds.top < window.innerHeight * 0.8 && bounds.bottom > 100;
+      syncVideoPlayback();
+    };
+    window.addEventListener('scroll', checkVideoVisibility, { passive: true });
+    window.addEventListener('resize', checkVideoVisibility);
+    checkVideoVisibility();
+  }
+}

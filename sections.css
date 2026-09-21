@@ -25,3 +25,20 @@ body{font-family:Manrope,Arial,Helvetica,sans-serif}.hero-image{position:absolut
 @media(max-width:720px){.component-visual figcaption{top:24px;bottom:auto}}
 
 @media(min-width:721px) and (max-width:1100px){.proof{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:25px}.proof>div:nth-child(3n + 1){padding-left:0;border-left:0}.proof>div:nth-child(n + 4){border-top:1px solid var(--line);padding-top:22px}}
+/* A silent, on-view film in the company section. */
+.company .company-main{grid-template-columns:1fr 1.05fr;gap:6vw;align-items:center}
+.company-visual{position:relative;isolation:isolate;margin:0;min-height:560px;background:var(--deep);overflow:hidden}
+.office-video{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.company-visual:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(5,20,26,.1),transparent 35%,rgba(5,20,26,.85))}
+.company-visual figcaption{position:absolute;left:32px;right:24px;bottom:34px;z-index:2;pointer-events:none}
+.company .company-visual h2{color:#fff;font-size:clamp(1.8rem,2.6vw,2.5rem);line-height:1.22;letter-spacing:-.04em}
+.company .company-visual h2 span{color:var(--gold)}
+.video-toggle{position:absolute;right:20px;top:20px;z-index:3;display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:10px 14px;color:#fff;background:rgba(9,30,38,.84);border:1px solid #ffffff66;font-size:.875rem;line-height:1.3;cursor:pointer}
+.video-toggle[hidden]{display:none}.video-toggle:hover{background:var(--navy)}.video-toggle:disabled{cursor:default}.video-toggle-icon{min-width:14px;text-align:center;font-size:1rem}
+@media(max-width:1100px){.company .company-main{gap:4vw}.company-visual{min-height:520px}.company-visual figcaption{left:25px;bottom:28px}}
+@media(max-width:720px){.company .company-main{grid-template-columns:1fr;gap:28px}.company-visual{min-height:420px}.company-visual figcaption{left:24px;right:22px;bottom:27px}.company .company-visual h2{font-size:clamp(1.6rem,6.8vw,2rem)}.video-toggle{right:16px;top:16px}}
+.company .company-main{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}.company-visual{width:100%;max-width:380px;aspect-ratio:9 / 16;min-height:0;justify-self:center}.office-video{object-fit:contain}.company-copy{max-width:650px}.company .company-visual h2{font-size:clamp(1.6rem,2.2vw,2rem)}
+@media(max-width:1100px){.company-visual{min-height:0}}
+@media(max-width:720px){.company .company-main{grid-template-columns:1fr}.company-visual{min-height:0;max-width:380px}.company .company-visual h2{font-size:clamp(1.6rem,6.8vw,2rem)}}
+
+.proof .metric-currency{font-size:1rem;letter-spacing:0;margin-right:.4em}
