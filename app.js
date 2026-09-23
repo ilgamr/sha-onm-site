@@ -3,7 +3,49 @@ const mobileNav=document.querySelector('#mobile-nav');
 menuButton.addEventListener('click',()=>{const open=menuButton.getAttribute('aria-expanded')==='true';menuButton.setAttribute('aria-expanded',String(!open));menuButton.setAttribute('aria-label',open?'Open menu':'Close menu');mobileNav.hidden=open;});
 mobileNav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mobileNav.hidden=true;menuButton.setAttribute('aria-expanded','false');menuButton.setAttribute('aria-label','Open menu');}));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mobileNav.hidden){mobileNav.hidden=true;menuButton.setAttribute('aria-expanded','false');menuButton.setAttribute('aria-label','Open menu');menuButton.focus();}});
-document.querySelectorAll('.category').forEach(item=>item.addEventListener('toggle',()=>{if(item.open){document.querySelectorAll('.category').forEach(other=>{if(other!==item)other.open=false;});}}));
+const categoryItems = document.querySelectorAll('.category');
+const expertiseVisual = document.querySelector('#expertise-visual');
+let categoryImagesPrimed = false;
+
+function primeCategoryImages() {
+  if (categoryImagesPrimed) return;
+  categoryImagesPrimed = true;
+  categoryItems.forEach(item => {
+    const source = item.dataset.image;
+    if (source) { const preload = new Image(); preload.src = source; }
+  });
+}
+
+function showCategoryImage(item) {
+  if (!expertiseVisual) return;
+  const source = item.dataset.image;
+  if (!source) return;
+  const current = expertiseVisual.getAttribute('src');
+  if (current === source) return;
+  const next = new Image();
+  const apply = () => {
+    expertiseVisual.classList.add('is-fading');
+    window.setTimeout(() => {
+      expertiseVisual.src = source;
+      expertiseVisual.alt = item.dataset.alt || '';
+      expertiseVisual.classList.remove('is-fading');
+    }, 160);
+  };
+  next.decode ? next.decode().then(apply).catch(apply) : (next.onload = apply, next.onerror = apply);
+  next.src = source;
+}
+
+categoryItems.forEach(item => item.addEventListener('toggle', () => {
+  if (!item.open) return;
+  categoryItems.forEach(other => { if (other !== item) other.open = false; });
+  showCategoryImage(item);
+}));
+
+const categoriesList = document.querySelector('.categories');
+if (categoriesList) {
+  ['pointerenter','focusin','touchstart'].forEach(evt =>
+    categoriesList.addEventListener(evt, primeCategoryImages, { once: true, passive: true }));
+}
 document.querySelector('#year').textContent=new Date().getFullYear();
 document.querySelector('.copy-email').addEventListener('click',async()=>{const status=document.querySelector('#copy-status');try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText('info@sha-onm.com');}else{const field=document.createElement('textarea');field.value='info@sha-onm.com';field.style.position='fixed';field.style.opacity='0';document.body.append(field);field.select();const copied=document.execCommand('copy');field.remove();if(!copied)throw new Error('Clipboard unavailable');}status.textContent='Email copied';}catch{status.textContent='Select and copy: info@sha-onm.com';}});
 const officeVideo = document.querySelector('#office-video');
