@@ -43,3 +43,10 @@ body{font-family:Manrope,Arial,Helvetica,sans-serif}.hero-image{position:absolut
 @media(max-width:720px){.company .company-main{grid-template-columns:1fr}.company-visual{min-height:0;max-width:380px}.company .company-visual h2{font-size:clamp(1.6rem,6.8vw,2rem)}}
 
 .proof .metric-currency{font-size:1rem;letter-spacing:0;margin-right:.4em}
+
+.after-hours{background:var(--pale);border-top:1px solid var(--line);display:flex;gap:40px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding-top:54px;padding-bottom:54px}
+.after-hours-text{max-width:620px}
+.after-hours h2{font-size:34px;line-height:1.15;letter-spacing:-.025em;margin:0 0 12px}
+.after-hours-text p{color:var(--muted);font-size:14.5px;line-height:1.6;margin:0}
+.after-hours-cta{flex:none}
+@media(max-width:760px){.after-hours{gap:26px;padding-top:44px;padding-bottom:44px}.after-hours h2{font-size:28px}.after-hours-cta{width:100%;justify-content:center}}
