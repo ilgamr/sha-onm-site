@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#11282f">
+  <meta name="description" content="Night Shift — an after-hours crane game from Shanghai O&M. Steady the load, place six containers and send your ship to sea.">
+  <title>Night Shift — Shanghai O&M</title>
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="game.js"></script>
+</head>
+<body>
+  <main class="app" id="app">
+    <header class="masthead">
+      <a class="brand" href="https://sha-onm.com/" target="_blank" rel="noopener noreferrer" aria-label="Shanghai O&M — website">
+        <img class="brand-logo" src="assets/logo.png" width="48" height="48" alt="">
+        <span class="brand-name">Shanghai O&amp;M Equipment Co., Ltd.</span>
+      </a>
+      <div class="header-actions">
+        <select class="language-select" id="language" aria-label="Language" dir="ltr">
+          <option value="en" lang="en" selected>English</option>
+          <option value="ru" lang="ru">Русский</option>
+          <option value="zh" lang="zh-Hans">中文</option>
+          <option value="ar" lang="ar" dir="rtl">العربية</option>
+        </select>
+        <button class="icon-button" id="sound" aria-pressed="false" title="Enable sound" aria-label="Enable sound"><span id="soundIcon" aria-hidden="true">♪</span><span class="mute-line" id="muteLine"></span></button>
+        <button class="icon-button" id="help" title="How to play" aria-label="How to play"><span aria-hidden="true">?</span></button>
+        <button class="icon-button fullscreen" id="fullscreen" title="Full screen" aria-label="Full screen"><span aria-hidden="true">⛶</span></button>
+      </div>
+    </header>
+
+    <section class="game-shell" aria-label="Night Shift" id="gameShell">
+      <div class="hud" id="hud">
+        <div class="hud-title"><span class="tiny-label">NIGHT SHIFT</span><span class="shift-label" data-i18n="berth">BERTH 07</span></div>
+        <div class="metrics">
+          <div class="metric"><span class="tiny-label" data-i18n="time">TIME LEFT</span><strong id="timeValue">01:30</strong></div>
+          <div class="metric"><span class="tiny-label" data-i18n="loaded">ON BOARD</span><strong><span id="loadedValue">0</span><span class="muted"> / 6</span></strong></div>
+          <div class="metric score-metric"><span class="tiny-label" data-i18n="score">SCORE</span><strong id="scoreValue">0000</strong></div>
+        </div>
+        <button id="pause" class="icon-button pause-button" title="Pause" aria-label="Pause" disabled><span aria-hidden="true">Ⅱ</span></button>
+      </div>
+
+      <div class="stage" id="stage">
+        <canvas id="sea" width="1280" height="720" tabindex="0" aria-label="Game field. Arrow keys or WASD: crane and cable. Space: release load. P: pause.">This game requires a browser with Canvas 2D support.</canvas>
+        <div class="start-panel" id="startPanel">
+          <p class="eyebrow"><span></span> SHANGHAI · 23:40</p>
+          <h1>Night<br><em>shift.</em></h1>
+          <p class="intro" data-i18n="intro">The port never sleeps.<br>Six containers. One steady hand.</p>
+          <div class="start-actions">
+            <button class="primary-button" id="start"><span data-i18n="start">Start your shift</span><span aria-hidden="true">↗</span></button>
+            <button class="practice-button" id="practice" data-i18n="practice">Practice without a timer</button>
+          </div>
+          <p class="start-note" data-i18n="startNote">90 seconds · keyboard or on-screen controls</p>
+        </div>
+        <div class="scene-caption" id="sceneCaption"><span>31°13′ N &nbsp; 121°28′ E</span><span data-i18n="tagline">PRECISION AFTER DARK.</span></div>
+        <div class="play-hint" id="playHint" hidden><span class="hint-dot"></span><span id="hintText"></span></div>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+        <div class="overlay" id="pauseOverlay" hidden>
+          <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="pauseTitle">
+            <p class="eyebrow" data-i18n="hold">CRANE ON STANDBY</p>
+            <h2 id="pauseTitle" data-i18n="pauseTitle">The port can wait.</h2>
+            <p data-i18n="pauseText">The clock is stopped. Carry on when you’re ready.</p>
+            <button class="primary-button" id="resume"><span data-i18n="resume">Resume shift</span><span aria-hidden="true">↗</span></button>
+            <button class="practice-button" id="restartPause" data-i18n="restart">Start over</button>
+          </div>
+        </div>
+
+        <div class="overlay" id="helpOverlay" hidden>
+          <div class="dialog help-dialog" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+            <p class="eyebrow" data-i18n="briefing">YOUR 20-SECOND BRIEFING</p>
+            <h2 id="helpTitle" data-i18n="helpTitle">Steady. Precise. On board.</h2>
+            <ol class="help-steps">
+              <li><span class="step-number">01</span><p data-i18n="help1">Move the load above an empty outlined bay. Use ← → or A / D to move the crane.</p></li>
+              <li><span class="step-number">02</span><p data-i18n="help2">Let the swing settle. Lower the container close to the deck with ↓ / S. Raise it with ↑ / W.</p></li>
+              <li><span class="step-number">03</span><p data-i18n="help3">Press Space to release. Low height and low speed earn more points. The next load is picked up automatically.</p></li>
+            </ol>
+            <div class="help-tip" data-i18n="helpTip">Fill the lower bays first. Each container can support one more. A green hint means it’s a good time to release.</div>
+            <button class="primary-button" id="closeHelp"><span data-i18n="understood">Ready to go</span><span aria-hidden="true">↗</span></button>
+          </div>
+        </div>
+
+        <div class="overlay" id="endOverlay" hidden>
+          <div class="dialog result-dialog" role="dialog" aria-modal="true" aria-labelledby="endTitle">
+            <p class="eyebrow" id="endEyebrow"></p>
+            <h2 id="endTitle"></h2>
+            <p id="endDescription"></p>
+            <div class="result-score"><strong id="endScore">0</strong><span data-i18n="points">POINTS THIS SHIFT</span></div>
+            <div class="result-details"><span id="endLoaded"></span><span id="endBest"></span></div>
+            <div class="lesson"><span class="tiny-label" data-i18n="lessonTitle">TAKE THIS WITH YOU</span><p data-i18n="lesson">A longer cable gives the load a slower swing. Braking gently and early helps you place it more precisely.</p></div>
+            <button class="primary-button" id="again"><span data-i18n="again">One more shift</span><span aria-hidden="true">↗</span></button>
+            <button class="practice-button" id="home" data-i18n="home">Back to the port</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-desk">
+        <div class="keyboard-guide"><span><kbd>←</kbd><kbd>→</kbd> <span data-i18n="move">move</span></span><span><kbd>↑</kbd><kbd>↓</kbd> <span data-i18n="rope">cable</span></span><span><kbd class="space-key">SPACE</kbd> <span data-i18n="release">release</span></span></div>
+        <div class="touch-controls" aria-label="Game controls">
+          <button class="control-key" data-key="ArrowLeft" aria-label="Move crane left">←</button>
+          <button class="control-key" data-key="ArrowRight" aria-label="Move crane right">→</button>
+          <span class="control-divider"></span>
+          <button class="control-key" data-key="ArrowUp" aria-label="Raise load">↑</button>
+          <button class="control-key" data-key="ArrowDown" aria-label="Lower load">↓</button>
+          <button class="control-key drop-key" id="drop" data-i18n="drop">RELEASE</button>
+        </div>
+        <div class="desk-note"><span class="tiny-label" data-i18n="best">PERSONAL BEST</span><strong id="bestValue">—</strong></div>
+      </div>
+    </section>
+    <footer><span data-i18n="footer">A little night shift. An eye for every detail.</span><span>SHANGHAI O&M <span class="footer-separator">/</span> AFTER HOURS · 01</span></footer>
+    <noscript><p class="noscript">Enable JavaScript in your browser to play.</p></noscript>
+  </main>
+</body>
+</html>
