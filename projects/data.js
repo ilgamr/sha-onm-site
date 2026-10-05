@@ -94,7 +94,7 @@ window.PROJECTS = [{"id":"p001","c":"product","t":"Underground mining truck","d"
 {"id":"p093","c":"factory","t":"Cold pilger tube mill hall","d":"Cold pilger mills in a seamless tube plant.","p":"Seamless stainless tubes","s":"Supplier audit","w":560,"h":315,"y":2024},
 {"id":"p094","c":"factory","t":"Welded tube production hall","d":"Overview of a welded stainless tube production hall.","p":"Welded stainless tubes","s":"Supplier audit","w":558,"h":420,"y":2026},
 {"id":"p095","c":"product","t":"Cold pilger mill spare parts","d":"Lead screws and spare parts for cold pilger tube mills.","p":"Mill spare parts","s":"Spare parts","w":360,"h":640,"y":2025},
-{"id":"p096","c":"product","t":"Crane control cabinet","d":"A control cabinet for a lifting crane, wired and ready for testing.","p":"Lifting equipment","s":"Finished goods","w":480,"h":640,"y":2025},
+{"id":"p096","c":"product","t":"Crane control cabinet","d":"A control cabinet for a lifting crane during assembly and before wiring.","p":"Lifting equipment","s":"Production follow-up","w":480,"h":640,"y":2025},
 {"id":"p097","c":"visit","t":"Client delegation at a partner plant","d":"Our client's delegation with the plant's management after a technical meeting and production tour.","p":"Client visit","s":"Factory tour & meeting","w":438,"h":330,"y":2026},
 {"id":"p098","c":"visit","t":"Winter factory visit","d":"A winter visit to a manufacturer to agree technical details and production schedules.","p":"Client visit","s":"Technical meeting","w":438,"h":330,"y":2024},
 {"id":"p099","c":"visit","t":"Logistics centre tour","d":"A delegation touring a manufacturer's warehouse and logistics centre.","p":"Client visit","s":"Factory tour","w":438,"h":330,"y":2026},
