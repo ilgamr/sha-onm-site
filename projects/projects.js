@@ -36,8 +36,10 @@
   }
   const globeOrder = shuffled(DATA, 20261006);
   const byDate = DATA.slice().sort((a, b) => b.y - a.y || a.id.localeCompare(b.id));
+  // "All photos" opens with delegation photos first, then everything else (newest first)
+  const allOrder = byDate.filter(p => p.dl).concat(byDate.filter(p => !p.dl));
   let filter = 'all';
-  let list = byDate;
+  let list = allOrder;
   let current = null;
 
   /* ---------- Globe geometry ---------- */
@@ -239,7 +241,7 @@
   function setFilter(f) {
     filter = f;
     filterBtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.filter === f)));
-    list = f === 'all' ? byDate : byDate.filter(p => p.c === f);
+    list = f === 'all' ? allOrder : byDate.filter(p => p.c === f);
     tiles.forEach(t => t.el.classList.toggle('is-dim', f !== 'all' && t.p.c !== f));
     renderStrip();
     if (current) updateCount();
